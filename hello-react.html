@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello React</title>
+    <script src="https://fb.me/react-0.14.3.js"></script>
+    <script src="https://fb.me/react-dom-0.14.3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+  </head>
+  <body>
+    <div id="mount-point"></div>
+    <script type="text/babel">
+
+    var FilteredList = React.createClass({
+
+      filterList: function(event){
+        var updatedList = this.state.initialItems;
+        // console.log(event.target.value)
+        // console.log(updatedList)
+        updatedList = updatedList.filter(function(item){
+          return item.toLowerCase().search(
+            event.target.value.toLowerCase()) !== -1;
+        });
+        console.log(updatedList)
+        this.setState({items: updatedList});
+      },
+
+      getInitialState: function(){
+         return {
+           initialItems: [ "Apples","Broccoli","Chicken","Duck","Eggs","Fish","Granola","Hash Browns"],
+           items: []
+         }
+      },
+      // Invoked once before the initial rendering occurs.
+      // If you call setState within this method,
+      // render() will see the updated state
+      // and will be executed only ONCE despite the state change.
+      componentWillMount: function(){
+        this.setState({items: this.state.initialItems})
+      },
+
+      render: function(){
+        // 1. input box, get filtered list when user type
+        // 2. past filtered list into List component to handle display
+        return (
+          <div className="filter-list">
+            <input type="text" placeholder="Search" onChange={this.filterList}/>
+            <List items={this.state.items}/>
+          </div>
+        );
+      }
+  });
+
+  var List = React.createClass({
+    render: function(){
+      return (
+        <ul>
+        {
+          this.props.items.map(function(item) {
+            return <li key={item}>{item}</li>
+          })
+         }
+        </ul>
+      )
+    }
+  });
+
+  React.render(<FilteredList/>, document.getElementById('mount-point'));
+
+    </script>
+  </body>
+</html>
